@@ -26,9 +26,7 @@ db = []
 
 @app.get("/")
 def read_root():
-    with open('access.txt', 'a') as f:
-        f.write('i have been accessed\n')
-    return {"Hello": "FastApi"}
+    return {"Hello": "FastApi", "database": db}
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Optional[str] = None):
@@ -50,6 +48,7 @@ def create_any(mydict: dict):
     with open('posts.txt', 'a') as f:
         f.write(str(mydict))
         f.write('\n')
+    db.append(mydict)
     return mydict
 
 # @app.delete('/cities')
