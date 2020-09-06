@@ -26,6 +26,8 @@ db = []
 
 @app.get("/")
 def read_root():
+    with open('access.txt', 'a') as f:
+        f.write('i have been accessed\n')
     return {"Hello": "FastApi"}
 
 @app.get("/items/{item_id}")
