@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from models import Posts
 
 app = FastAPI()
-models.Base.metadata.create_all(bind=engine)
+models.Base.metadata.create_all(bind=engine, checkfirst=True)
 
 class Item(BaseModel):
     name: str
