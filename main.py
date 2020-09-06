@@ -45,9 +45,6 @@ def create_city(city: City):
 
 @app.post('/any')
 def create_any(mydict: dict):
-    with open('posts.txt', 'a') as f:
-        f.write(str(mydict))
-        f.write('\n')
     db.append(mydict)
     return mydict
 
