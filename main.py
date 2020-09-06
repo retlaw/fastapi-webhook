@@ -1,8 +1,13 @@
+import models
 from typing import Optional
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, Depends
 from pydantic import BaseModel
+from database import SessionLocal, engine
+from sqlalchemy.orm import Session
+from models import Posts
 
 app = FastAPI()
+models.Base.metadata.create_all(bind=engine)
 
 class Item(BaseModel):
     name: str
@@ -22,30 +27,40 @@ class City(BaseModel):
 class Any(BaseModel):
     any: dict
 
-db = []
+def get_db():
+    try:
+        db = SessionLocal()
+        yield db
+    finally:
+        db.close_all()
+# db = []
 
 @app.get("/")
-def read_root():
-    return {"Hello": "FastApi", "database": db}
+def read_root(db: Session = Depends(get_db)):
+    return {"Hello": "FastApi", "database": db.query(Posts).all()}
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Optional[str] = None):
-    return {"item_id": item_id, "q": q}
+    return {"item_id": item_id, "q": q} 
 
-@app.get('/cities')
-def get_cities():
-    return db
+# @app.get('/cities')
+# def get_cities():
+#     return db
 
 # @app.get('/cities/{city_id}')
 
-@app.post('/cities')
-def create_city(city: City):
-    db.append(city.dict())
-    return db[-1] 
+# @app.post('/cities')
+# def create_city(city: City):
+#     db.append(city.dict())
+#     return db[-1] 
 
 @app.post('/any')
-def create_any(mydict: dict):
-    db.append(mydict)
+def create_any(mydict: dict, db: Session = Depends(get_db)):
+    post = Posts()
+    post.post = str(mydict)
+    db.add(post)
+    db.commit()
+    # db.append(mydict)
     return mydict
 
 # @app.delete('/cities')
