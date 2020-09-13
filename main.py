@@ -1,8 +1,8 @@
+from typing import Optional
 from fastapi import FastAPI, Request, Depends
 from pydantic import BaseModel
 
 app = FastAPI()
-models.Base.metadata.create_all(bind=engine)
 
 class Item(BaseModel):
     name: str
@@ -19,17 +19,11 @@ class City(BaseModel):
     name: str
     timezone: str 
  
-def get_db():
-    try:
-        db = SessionLocal()
-        yield db
-    finally:
-        db.close_all()
 # db = []
 
 @app.get("/")
-def read_root(db: Session = Depends(get_db)):
-    return {"Hello": "FastApi", "database": db.query(Posts).all()}
+def read_root():
+    return {"Hello": "FastApi"}
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Optional[str] = None):
