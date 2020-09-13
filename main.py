@@ -1,8 +1,38 @@
 from typing import Optional
 from fastapi import FastAPI, Request, Depends
 from pydantic import BaseModel
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, relationship
 
+
+Base = declarative_base()
 app = FastAPI()
+
+
+class User(Base):
+    __tablename__ = "user"
+
+    id = Column('id', Integer, primary_key=True, autoincrement=True)
+    username = Column('username', String, unique=True)
+
+
+engine = create_engine(
+    # 'postgresql://puser:ppassword@localhost:5432',
+    # echo=True
+    'postgres://dqssehkxoescfl:0078d16323a2b20ed3c2f4fe5c4ded01517bb7a76ad730920591c0ae106b2c58@ec2-35-174-88-65.compute-1.amazonaws.com:5432/dd07jb9ubigs6g',
+    echo=False
+)
+
+Base.metadata.create_all(bind=engine)
+Session = sessionmaker(bind=engine)
+
+
+# user = User()
+# user.username = "Charntil"
+
+
+
 
 class Item(BaseModel):
     name: str
@@ -18,16 +48,36 @@ class Alert(BaseModel):
 class City(BaseModel):
     name: str
     timezone: str 
- 
+
+
+class MyUser(BaseModel):
+    username: str
+
 # db = []
+
 
 @app.get("/")
 def read_root():
     return {"Hello": "FastApi"}
 
+
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Optional[str] = None):
     return {"item_id": item_id, "q": q} 
+
+
+@app.post("/users")
+def add_user(this_user: MyUser):
+    session = Session()
+    user = User()
+    user.username = this_user.username
+    session.add(user)
+    session.commit()
+    users = session.query(User).all()
+    for user in users:
+        print(user.username, user.id)
+    session.close()
+    return users
 
 # @app.get('/cities')
 # def get_cities():
