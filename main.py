@@ -22,7 +22,7 @@ engine = create_engine(
     # echo=True
     'sqlite:///users.db',
     echo=True
-    # 'postgres://dqssehkxoescfl:0078d16323a2b20ed3c2f4fe5c4ded01517bb7a76ad730920591c0ae106b2c58@ec2-35-174-88-65.compute-1.amazonaws.com:5432/dd07jb9ubigs6g',
+    # 'postgres://',
     # echo=False
 )
 
