@@ -1,10 +1,5 @@
-import models
-from typing import Optional
 from fastapi import FastAPI, Request, Depends
 from pydantic import BaseModel
-from database import SessionLocal, engine
-from sqlalchemy.orm import Session
-from models import Posts
 
 app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
@@ -24,9 +19,6 @@ class City(BaseModel):
     name: str
     timezone: str 
  
-class Any(BaseModel):
-    any: dict
-
 def get_db():
     try:
         db = SessionLocal()
@@ -53,15 +45,6 @@ def read_item(item_id: int, q: Optional[str] = None):
 # def create_city(city: City):
 #     db.append(city.dict())
 #     return db[-1] 
-
-@app.post('/any')
-def create_any(mydict: dict, db: Session = Depends(get_db)):
-    post = Posts()
-    post.post = str(mydict)
-    db.add(post)
-    db.commit()
-    # db.append(mydict)
-    return mydict
 
 # @app.delete('/cities')
 
