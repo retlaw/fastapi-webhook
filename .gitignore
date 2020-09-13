@@ -2,4 +2,5 @@ __pycache__
 env
 access.txt
 posts.txt
-posts.db
+.vscode
+*.db
