@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
+import os
 
 
 Base = declarative_base()
@@ -65,7 +66,10 @@ class MyUser(BaseModel):
 
 @app.get("/")
 def read_root():
-    return {"Hello": "FastApi"}
+    return {
+        "Hello": "FastApi",
+        "file?": os.path.isfile('users.db')
+    }
 
 
 @app.get("/items/{item_id}")
