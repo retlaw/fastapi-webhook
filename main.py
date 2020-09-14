@@ -24,15 +24,15 @@ class Alert(Base):
     alert = Column('alert', String)
 
 
-engine = create_engine(
-    # 'postgresql://puser:ppassword@localhost:5432',
-    # echo=True
-    'sqlite:///users.db',
-    echo=True
-)
+# engine = create_engine(
+#     # 'postgresql://puser:ppassword@localhost:5432',
+#     # echo=True
+#     'sqlite:///users.db',
+#     echo=True
+# )
 
-Base.metadata.create_all(bind=engine)
-Session = sessionmaker(bind=engine)
+# Base.metadata.create_all(bind=engine)
+# Session = sessionmaker(bind=engine)
 
 
 # user = User()
