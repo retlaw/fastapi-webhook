@@ -17,12 +17,19 @@ class User(Base):
     username = Column('username', String, unique=True)
 
 
+class Alert(Base):
+    __tablename__ = "alert"
+
+    id = Column('id', Integer, primary_key=True, autoincrement=True)
+    alert = Column('alert', String)
+
+
 engine = create_engine(
     # 'postgresql://puser:ppassword@localhost:5432',
     # echo=True
     'sqlite:///users.db',
     echo=True
-    # 'postgres://',
+    # 'postgres://dqssehkxoescfl:0078d16323a2b20ed3c2f4fe5c4ded01517bb7a76ad730920591c0ae106b2c58@ec2-35-174-88-65.compute-1.amazonaws.com:5432/dd07jb9ubigs6g',
     # echo=False
 )
 
@@ -41,11 +48,11 @@ class Item(BaseModel):
     price: float
     is_offer: Optional[bool] = None
 
-class Alert(BaseModel):
-    name: str
-    description: Optional[str] = None
-    dateTime: int = None
-    tax: Optional[float] = None
+# class Alert(BaseModel):
+#     name: str
+#     description: Optional[str] = None
+#     dateTime: int = None
+#     tax: Optional[float] = None
 
 class City(BaseModel):
     name: str
@@ -85,6 +92,17 @@ def add_user(this_user: MyUser):
 # def get_cities():
 #     return db
 
+
+@app.get("/all-alerts")
+def get_alerts():
+    session = Session()
+    alerts = session.query(Alert).all()
+    # for user in users:
+    #     print(user.username, user.id)
+    session.close()
+    return alerts
+
+
 # @app.get('/cities/{city_id}')
 
 # @app.post('/cities')
@@ -94,10 +112,21 @@ def add_user(this_user: MyUser):
 
 # @app.delete('/cities')
 
+
 @app.put("/items/{item_id}")
 def udpate_item(item_id: int, item: Item):
     return {"item_name": item.name, "item_id": item_id}
 
-@app.post("/meraki/alerts/")
-def meraki(q: Optional[str]):
-    return {q: q}
+
+@app.post("/sdwan/alerts")
+def meraki(post: dict):
+    session = Session()
+    alert = Alert()
+    alert.alert = str(post)
+    session.add(alert)
+    session.commit()
+    # users = session.query(User).all()
+    # for user in users:
+    #     print(user.username, user.id)
+    session.close()
+    return {"alert": post}
