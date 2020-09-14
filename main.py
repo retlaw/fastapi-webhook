@@ -28,12 +28,13 @@ class Alert(Base):
 engine = create_engine(
     # 'postgresql://puser:ppassword@localhost:5432',
     # echo=True
-    'sqlite:///users.db',
+    # 'sqlite:///users.db
+    os.environ['DATABASE_URL'],
     echo=True
 )
 
-# Base.metadata.create_all(bind=engine)
-# Session = sessionmaker(bind=engine)
+Base.metadata.create_all(bind=engine)
+Session = sessionmaker(bind=engine)
 
 
 # user = User()
