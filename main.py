@@ -68,7 +68,7 @@ class MyUser(BaseModel):
 def read_root():
     return {
         "Hello": "FastApi",
-        "file?": os.path.isfile('users.db')
+        "db_environ": os.environ['DATABASE_URL']
     }
 
 
