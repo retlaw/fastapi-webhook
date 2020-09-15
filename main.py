@@ -40,10 +40,10 @@ Session = sessionmaker(bind=engine)
 # user = User()
 # user.username = "Charntil"
 
-session = Session()
-alert = Alert()
-alerts = session.query(Alert).delete()
-session.commit()
+# session = Session()
+# alert = Alert()
+# alerts = session.query(Alert).delete()
+# session.commit()
 
 
 
