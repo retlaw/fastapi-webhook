@@ -40,6 +40,10 @@ Session = sessionmaker(bind=engine)
 # user = User()
 # user.username = "Charntil"
 
+session = Session()
+alert = Alert()
+alerts = session.query(Alert).delete()
+session.commit()
 
 
 
@@ -68,8 +72,7 @@ class MyUser(BaseModel):
 @app.get("/")
 def read_root():
     return {
-        "Hello": "FastApi",
-        "db_environ": os.environ['DATABASE_URL']
+        "Hello": "FastApi"
     }
 
 
